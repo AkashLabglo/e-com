@@ -1,0 +1,44 @@
+<html>
+    <head>
+        {% load static %}
+        <link rel = "stylesheet" href="{% static 'css/login.css' %}">
+    </head>
+{% if opj1 %} 
+<center>
+<div class = "container">
+       
+
+    <table border=1>
+    <tr style = "color:rgb(226, 133, 26)">
+    <th>image</th> 
+    <th>Prodect</th> 
+    <th>quantity</th> 
+    <th>price</th>  
+    <th>tax</th>
+    <th>total</th>
+    
+    </tr>
+    
+    {% for i in opj1 %}
+    <tr>
+        
+    <td><img src ="{{i.name.image.url}}" class="img-fluid img-thumbnail" alt = "Not Uploaded" width =100px height = 100px></td>
+    <td>{{i.name.model}}</td>
+    <td>{{i.quantity}}</td>
+    <td>{{i.price}}</td>
+    <td>{{tax}}</td>
+    <td>{{total}}</td>   
+
+</tr>
+    
+    {% endfor %}
+    </table>
+    
+    
+    {% else %}
+    <h1>Your Cart Empty</h1> 
+    {% endif %}
+  
+</div></center>
+
+</html>

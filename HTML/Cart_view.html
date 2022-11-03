@@ -1,0 +1,62 @@
+<html>
+    <head>
+        {% load static %}
+        <link rel = "stylesheet" href="{% static 'css/login.css' %}">
+    </head>
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <h3 class = "message"><li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li></h3>
+    {% endfor %}
+    {% endif %}
+{% if opj %} 
+<form method = "POST" action = "Orderedby">
+    {% csrf_token %}
+    
+    <button type="submit">checkout</button>
+  </form>
+<center>
+<div class = "container">
+       
+
+    <table border=1>
+    <tr style = "color:rgb(226, 133, 26)">
+    <th>image</image>
+    <th>model</th>  
+    <th>price</th>   
+    <th>quantity</th>
+    <th>remove</th>
+    
+    </tr>
+    
+    {% for i in opj %}
+    <tr>
+        
+    <td><img src ="{{i.name.image.url}}" alt = "Not Uploaded" width =100px ></td>
+    <td>{{i.name}}</td>
+    <td>{{i.price}}</td>
+    <td>
+        <form method = "POST" action = "addquantity/{{i.id}}">
+            {% csrf_token %}
+            <input type="number" id="quantity" name="quantity" value = "{{i.quantity}}" >
+            <button type="submit">ok</button>
+          </form>   
+    </td>
+    <td><a href="remove/{{i.id}}" class="button">remove</a></td>
+        
+
+</tr>
+    
+    {% endfor %}
+    </table>
+    
+    
+    {% else %}
+    <center><div>
+    <h1>Your Cart Empty !</h1>
+    </div> </center>
+    {% endif %}
+  
+</div></center>
+
+</html>

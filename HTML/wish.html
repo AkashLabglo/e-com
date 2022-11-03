@@ -1,0 +1,43 @@
+<!--Home page View-->
+<html>
+    <head>
+        {% load static %}
+        <link rel = "stylesheet" href="{% static 'css/login.css' %}">
+    </head>    
+{% if opj %} 
+<center>
+<div class = "container">
+       
+
+    <table border=1 width=500px height = 500px>
+    <tr style = "color:green">
+    <th><h2>Prodects<h2></th>
+    
+    
+    </tr>
+    
+    {% for i in opj %}
+    <tr>
+        
+    <td><center>
+    <p><img src ="{{i.image.url}}" alt = "Not Uploaded" width =250px height = 250px ></p>
+    
+   <p><h3>model :{{i.name.model}}</h3></p>
+   <p>Brand :{{i.name.brand}}</p>
+   <p>bice  :{{i.price}}</p>
+   <a href="wishremove/{{i.id}}" class="button">remove</a>
+   <a href = "/cart/{{i.name.id}}" method = "POST" class="button">Add Cart</a>
+   </center></td>
+    {% endfor %}
+    
+    </table>
+    
+    
+    {% else %}
+    <center><h1>Your wish is Empty !</h1></center> 
+    {% endif %}
+  
+</div></center>
+<!--Home view finish-->
+</body>
+</html>

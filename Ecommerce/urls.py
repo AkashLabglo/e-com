@@ -19,7 +19,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from wep_app.views import *
-from django.conf.urls import include
+from django.conf.urls import include 
 
 
 '''urlpatterns = [ 
@@ -27,7 +27,7 @@ from django.conf.urls import include
 ]'''
 
 urlpatterns = [
-    path('grappelli/', include('grappelli.urls')), # grappelli URLS
+    #path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path('admin/', admin.site.urls),
     path('', interface, name = "interface"),
     path('search', search, name = "search"),  
@@ -49,7 +49,10 @@ urlpatterns = [
     path('wish/<pk>', add_wish, name = "add_wish"),
     path('Show_wish', Show_wish, name = 'Show_wish'), 
     path('wishremove/<id>', wish_remove, name = "wish_remove"),
-
+    # json urls
+    path('prodect_api', prodect_api, name = 'prodect_api'), 
+    path('cart_api', cart_api, name = 'cart_api'), 
+    path('Order_api', Order_api, name = 'Order_api'), 
     
 ]
 # image url to share

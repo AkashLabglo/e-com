@@ -16,6 +16,12 @@ from django.contrib.auth.models import User
 # only_allowed_login person:-
 from django.contrib.auth.decorators import login_required
 from datetime import *
+#jason_related_moduel:
+from django.core.serializers import *
+import json
+
+
+
 
 #------------------------------------------------------
 
@@ -31,7 +37,9 @@ def interface(request):
 def search(request):
    # opj =  (Prodect.objects.filter(name = request.POST.get("search")) or  Prodect.objects.filter(category = request.POST.get("search"))) and Prodect.objects.filter(stock = 0)
     opj = Prodect.objects.filter((Q(brand = request.POST.get("search")) | Q(category = request.POST.get("search")) | Q(name = request.POST.get("search"))) & Q(stock = 0))
-    return render (request, 'interface.html', {'opj': opj})
+    #return render (request, 'interface.html', {'opj': opj})
+    search_list = list(opj.values())
+    return JsonResponse(search_list,safe=False)
 # --------------------------------------------------------
 
 # add_to_cart prodects(tb_added):-
@@ -68,7 +76,9 @@ def Show_cart(request):
         order = False, 
         customer = request.user
         )
-    return render (request, 'Cart_view.html', {'opj': opj})
+    #return render (request, 'Cart_view.html', {'opj': opj})
+    show_cart_list = list(opj.values())
+    return JsonResponse(show_cart_list,safe=False)
 
 # cart_items_remove:-
 @login_required
@@ -112,6 +122,8 @@ def login(request):
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
+    
+
 
 #------------------------------------------------------
 
@@ -183,14 +195,14 @@ def Orderedby(request, id):
 @login_required
 def Orderedby(request):
     """
-
+    prodect's added to order Table 
     """
     ak = Prodect.objects.all()
-    ak.update(added = 0)
+    ak.update(added = 0) # prodect added staus change 
+
     if request.method == 'POST' : 
         opj = Cart.objects.filter(
             customer = request.user, 
-           
         )
         opj2= Orderby.objects.create(
             customer = request.user, 
@@ -215,8 +227,8 @@ def Orderedby(request):
         tax = int(total['p_q']) * opj2.tax
         print(int(tax))
         contaxt = {
-            'opj1':opj1, # order's m2m_cart
-            'opj2':opj2, # order tb
+            'opj1':opj1.values(), # order's m2m_cart
+            'opj2':opj2.values(), # order tb
             'total':total['p_q']+ int(tax),
             'tax':int(tax),  
             'count':count, 
@@ -224,7 +236,7 @@ def Orderedby(request):
             
         }
     return render(request, "orderview_page.html" , contaxt)
-        
+      
 # order_cancel:
 def Cancel_order(request, id):
     if request.method == "POST":
@@ -249,7 +261,9 @@ def Orderhistory(request):
             'opj':opj
         }
         print('opj2', opj)
-        return render(request, 'orderhistory.html', contaxt)
+        #return render(request, 'orderhistory.html', contaxt)
+        show_order_history = list(opj.values())
+        return JsonResponse(show_order_history,safe=False)
 #------------------------------------------------------
 
 # add_to_wish;-
@@ -287,7 +301,9 @@ def Show_wish(request):
         order = False, 
         customer = request.user
         )
-    return render (request, 'wish.html', {'opj': opj})
+    #return render (request, 'wish.html', {'opj': opj})
+    wish_list = list(opj.values())
+    return JsonResponse(wish_list,safe=False)
 
 # wish_remove:-
 def wish_remove(request, id):
@@ -300,11 +316,43 @@ def wish_remove(request, id):
     opj1.added = 0
     opj1.save()
     #messages.warning(request,'The item was Already to your WishList')    
-
     opj.delete()
     return redirect("Show_wish") 
 
 #------------------------------------------------------
+
+
+def prodect_api(request, prety = True):
+    Prodect_data = Prodect.objects.all()
+    prodect_jn_convert = serialize('json' ,Prodect_data, fields = (
+        'name', 'model', 'image', 'category', 'brand', 'price', 'stock', 
+        'added'
+    ))
+    prodect_jn_convert_f = json.dumps(json.loads(prodect_jn_convert), indent=4)
+    print(prodect_jn_convert_f)
+    return HttpResponse(prodect_jn_convert_f)
+
+
+
+def cart_api(request, prety = True):
+    Cart_data = Cart.objects.all()
+    Cart_jn_convert = serialize('json' ,Cart_data, fields = (
+        'customer', 'image', 'name', 'category', 'price', 'quantity', 'order', 
+        'order_status'
+    ))
+    Cart_jn_convert_f = json.dumps(json.loads(Cart_jn_convert), indent=4)
+    print(Cart_jn_convert_f)
+    return HttpResponse(Cart_jn_convert_f)
+    
+
+def Order_api(request, prety = True):
+    Order_data = Cart.objects.all()
+    Order_jn_convert = serialize('json' ,Order_data, fields = (
+        'customer', 'ordered_things', 'order_status', 'tax'
+    ))
+    Order_jn_convert_f = json.dumps(json.loads(Order_jn_convert), indent=4)
+    print(Order_jn_convert_f)
+    return HttpResponse(Order_jn_convert_f)
 
 
 

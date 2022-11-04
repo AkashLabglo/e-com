@@ -36,6 +36,13 @@ PRODECT_STATUS = (
     (NOTADDED, 'not_added')
 )
 
+#prodect_stocks
+STOCKAVAILABLE = False
+STOCKANOTVAILABLE = True
+PRODECT_STOCK = (
+    (STOCKAVAILABLE, 'stockavailable'), 
+    (STOCKANOTVAILABLE, 'stockanotvailable')
+)
 
 class DateTimeUpdate(Model):
     created_at = DateTimeField(auto_now_add=True)
@@ -50,7 +57,7 @@ class Prodect(Model):
     category = CharField(max_length=150, null = False, blank = False)
     brand = CharField(max_length=150, null = False, blank = False)
     price = DecimalField(max_digits=10, decimal_places=2)
-    stock = BooleanField(default=False, help_text = "0-Show, 1-Hidden")
+    stock = BooleanField(default=False, help_text = "0-Show, 1-Hidden", choices = PRODECT_STOCK)
     added = IntegerField(default = 0, choices = PRODECT_STATUS) # 1.added_wish, 2.added_cart, 3.not_added
     def __str__(self):
         return self.name
@@ -97,5 +104,6 @@ class Wishlist(DateTimeUpdate):
     price = DecimalField(max_digits=10, decimal_places=2)
     quantity = IntegerField(default = 1, null = False) 
     order = BooleanField(default=False, help_text = "0-Add, 1-Remove") 
+    
 
 

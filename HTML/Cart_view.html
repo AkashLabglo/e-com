@@ -1,4 +1,4 @@
-<html>
+<!--<html>
     <head>
         {% load static %}
         <link rel = "stylesheet" href="{% static 'css/login.css' %}">
@@ -59,4 +59,33 @@
   
 </div></center>
 
+</html>-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+<link rel = "stylesheet" href="{% static 'css/cart.css' %}">
+</head>
+<body>
+
+<h2 style="text-align:center">Product Card</h2>
+{% for i in opj %}  
+<div class="card">
+   
+    <img src ="{{i.name.image.url}}" alt = "Not Uploaded" width =100px >
+  <h1>{{i.name.model}}</h1>
+  <p class="price">{{i.price}}</p>
+  <p>Some text about the jeans. Super slim and comfy lorem ipsum lorem jeansum. Lorem jeamsun denim lorem jeansum.</p>
+  <div class = "a">
+  <form method = "POST" action = "addquantity/{{i.id}}">
+    {% csrf_token %}
+    <input type="number" id="quantity" name="quantity" value = "{{i.quantity}}">
+    <button type="submit" >ok</button>
+  </form>
+</div> 
+  <p><button>Add to Cart</button></p>
+</div>
+{% endfor %}
+</body>
 </html>

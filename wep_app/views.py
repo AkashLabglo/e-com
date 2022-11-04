@@ -316,11 +316,12 @@ def wish_remove(request, id):
     opj1.added = 0
     opj1.save()
     #messages.warning(request,'The item was Already to your WishList')    
-
     opj.delete()
     return redirect("Show_wish") 
 
 #------------------------------------------------------
+
+
 def prodect_api(request, prety = True):
     Prodect_data = Prodect.objects.all()
     prodect_jn_convert = serialize('json' ,Prodect_data, fields = (
@@ -330,6 +331,7 @@ def prodect_api(request, prety = True):
     prodect_jn_convert_f = json.dumps(json.loads(prodect_jn_convert), indent=4)
     print(prodect_jn_convert_f)
     return HttpResponse(prodect_jn_convert_f)
+
 
 
 def cart_api(request, prety = True):
